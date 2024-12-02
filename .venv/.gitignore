@@ -1,2 +1,12 @@
-# created by virtualenv automatically
-#*
+# Ignore the entire venv folder
+venv/*
+
+# Allow specific directories/files to be tracked
+!venv/app.py
+!venv/MySQL.py
+
+# Exclude everything inside lib and bin except their required files (optional)
+venv/lib/*
+venv/bin/*
+!venv/lib/specific_file_or_dir_to_keep/
+!venv/bin/specific_file_or_dir_to_keep/

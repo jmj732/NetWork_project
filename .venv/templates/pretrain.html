@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>user_guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            font-family: "Gothic A1", Inter, system-ui, sans-serif;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            border: 1px solid black;
+            padding: 20px 40px;
+        }
+
+        .logo {
+            color: #000;
+            font-size: 40px;
+            font-family: "Yeongdo OTF", Inter, system-ui, sans-serif;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+        li{
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: black;
+            text-decoration: none;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ddd;
+        }
+
+        .pulser-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .pulser {
+            width: 280px;
+            height: 280px;
+            background: #00A24F;
+            border: 20px solid #127112;
+            border-radius: 50%;
+            position: relative;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #D2F3CC;
+            font-size: 40px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .pulser::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: #1EC301;
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0;
+            transform: scale(1);
+        }
+
+        .pulser.active::after {
+            animation: pulse 1000ms cubic-bezier(0.9, 0.7, 0.5, 0.9) infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(1.4);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+        }
+
+        .explain {
+            text-align: center;
+            font-size: 35px;
+            padding-bottom: 60px;
+        }
+
+        h3 {
+            text-shadow: 80px 80px 80px #FCFFDD;
+        }
+    </style>
+</head>
+<body>
+     <nav class="navbar">
+        <div class="logo">리햅핑</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('training') }}">훈련 시작</a></li>
+            <li><a href="{{ url_for('pretrain') }}">훈련 현황</a></li>
+            <li><a href="{{ url_for('userguide') }}">사용 가이드</a></li>
+            <li><a href="{{url_for('login')}}">로그인</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재활치료 서비스</title>
+    <title>Title</title>
     <style>
         * {
             margin: 0;
@@ -160,26 +159,69 @@
          a{
              text-decoration: none;
          }
+         .box{
+             margin-top: 50px;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             width: 1000px;
+             height: 600px;
+             background-color: #FFFFFF;
+             opacity: 0.1;
+             border-radius: 20px;
+             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+             z-index: 0;
+         }
+         main{
+             width: 100vw;
+             height: 100vh;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             background-image: url('../static/peo.png');
+             background-size: cover;
+             background-position: center;
+             background-repeat: no-repeat;
+             z-index: -1;
+         }
+         .input-group{
+             width: 500px;
+             height: 600px;
+             opacity: 1;
+             background-color: #333;
+         }
+         input {
+            background-color: white; /* 흰색 배경 */
+            color: black; /* 검정색 텍스트 */
+            border: 1px solid #ccc; /* 회색 테두리 */
+            border-radius: 5px; /* 테두리 둥글게 */
+            padding: 10px; /* 내부 여백 */
+            font-size: 16px; /* 글자 크기 */
+            width: 200px; /* 입력 필드 너비 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+            z-index: 100; /* 기본값으로 설정 */
+            opacity: 1; /* 불투명하게 설정 */
+        }
+
     </style>
 </head>
 <body>
-<div class="navbar">
-    <a href="{{ url_for('main') }}"><div class="logo">리햅핑</div></a>
-    <ul>
-        <li><a href="{{ url_for('pretrain') }}">훈련 시작</a></li>
-        <li><a href="{{ url_for('history') }}">훈련 현황</a></li>
-        <li><a href="{{ url_for('userguide') }}">훈련 가이드</a></li>
-    </ul>
-</div>
-<main class="hero">
-    <div class="hero-content">
-        <h1>작은 움직임에서 시작해 <br>큰 회복으로 나아가는<br>EMG 센서 기반의 맞춤형 재활치료 서비스</h1>
-        <div class="buttons">
-            <a href="{{ url_for('pretrain') }}"><button type="button" value="훈련 시작">훈련 시작</button></a>
-            <a href="{{ url_for('history') }}"><button type="button" value="훈련 현황">훈련 현황</button></a>
-            <a href="{{ url_for('userguide') }}"><button type="button" value="훈련 가이드">훈련 가이드</button></a>
+    <nav class="navbar">
+        <a href="{{ url_for('main') }}"><div class="logo">리햅핑</div></a>
+        <ul>
+            <li><a href="{{ url_for('training') }}">훈련 시작</a></li>
+            <li><a href="{{ url_for('pretrain') }}">훈련 현황</a></li>
+            <li><a href="{{ url_for('userguide') }}">사용 가이드</a></li>
+        </ul>
+    </nav>
+    <main>
+        <div class="box">
+            <div class="input-group">
+                <div><input></div>
+                <div><input></div>
+                <div><input></div>
+            </div>
         </div>
-    </div>
-</main>
+    </main>
 </body>
 </html>

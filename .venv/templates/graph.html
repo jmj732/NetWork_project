@@ -68,18 +68,19 @@
             left:50%;
             transform:translate(-50%, -50%);
             font-size:2rem;
-
         }
+        a{
+             text-decoration: none;
+         }
     </style>
 </head>
 <body>
 <nav class="navbar">
-    <div class="logo">리햅핑</div>
+    <a href="{{ url_for('main') }}"><div class="logo">리햅핑</div></a>
     <ul class="nav-links">
-        <li><a href="#">훈련 시작</a></li>
-        <li><a href="#">훈련 현황</a></li>
-        <li><a href="#">사용 가이드</a></li>
-        <li><a href="#">로그인</a></li>
+        <li><a href="training">훈련 시작</a></li>
+        <li><a href="history">훈련 현황</a></li>
+        <li><a href="userguide">사용 가이드</a></li>
     </ul>
 </nav>
 <div id="plugin">

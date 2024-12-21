@@ -1,45 +1,43 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, redirect
 from flask_socketio import SocketIO
 from flask_cors import CORS
 import MySQL
-import time
-import board
-import busio
-from digitalio import DigitalInOut
-from adafruit_mcp3xxx.mcp3008 import MCP3008
-from adafruit_mcp3xxx.analog_in import AnalogIn
-import time
+# import time
+# import board
+# import busio
+# from digitalio import DigitalInOut
+# from adafruit_mcp3xxx.mcp3008 import MCP3008
+# from adafruit_mcp3xxx.analog_in import AnalogIn
+# import time
 import threading
 
 
 app = Flask(__name__)
-averageForce = MySQL.AverageForce()
-TrainMange = MySQL.TrainingManager()
-flag = False
+# averageForce = MySQL.AverageForce()
+# TrainMange = MySQL.TrainingManager()
 socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
 
 # Myoware 데이터 읽기를 위한 설정
-spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
-cs = DigitalInOut(board.D5)
-mcp = MCP3008(spi, cs)
-chan = AnalogIn(mcp, MCP3008.P0)  # MCP3008의 채널 0에 Myoware 연결
+# spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
+# cs = DigitalInOut(board.D5)
+# mcp = MCP3008(spi, cs)
+# chan = AnalogIn(mcp, MCP3008.P0)  # MCP3008의 채널 0에 Myoware 연결
 
 # 플래그 및 스레드 초기화
 flag = True
 
+@app.route('/')
+def home():
+    return redirect('/main')
 
-@app.route('/')  # 메인 페이지
+@app.route('/main')  # 메인 페이지
 def main():
     return render_template("main.html")
 
 @app.route('/userguide')
 def userguide():
     return render_template("userguide.html")
-
-@app.route('/login')
-def login():
-    return render_template("login.html")
 
 @app.route('/pretrain')
 def pretrain():
@@ -53,13 +51,17 @@ def training():
 def graph():
     return render_template("graph.html")
 
-@app.route('/training/history')  # 훈련 현황 보여주기
+@app.route('/set-reps')
+def setreps():
+    return render_template("setreps.html")
+
+@app.route('/history')  # 훈련 현황 보여주기
 def history():
     try:
-        history_data = averageForce.getHistory()
-
-        if not history_data:
-            return jsonify({"status": "error", "message": "No training history found."}), 404
+        # history_data = averageForce.getHistory()
+        #
+        # if not history_data:
+        #     return jsonify({"status": "error", "message": "No training history found."}), 404
 
         return jsonify({
             "status": "success",
@@ -74,7 +76,7 @@ def history():
 
 
 
-@app.route('/training/average-force/save', methods=['POST'])  # 평균 힘 저장
+@app.route('/save-average-force', methods=['POST'])  # 평균 힘 저장
 def avg_force_save():
     try:
         force = request.json.get('force')
@@ -85,7 +87,7 @@ def avg_force_save():
                 "message": "No force value provided."
             }), 400
 
-        averageForce.saveForce(force)
+        # averageForce.saveForce(force)
         return jsonify({
             "status": "success",
             "message": "Average force saved successfully."
@@ -99,7 +101,7 @@ def avg_force_save():
 
 
 
-@app.route('/training/set-reps', methods=['POST'])  # 세트 및 횟수 설정
+@app.route('/set-reps', methods=['POST'])  # 세트 및 횟수 설정
 def set_reps():
     try:
         # 요청 본문에서 세트, 횟수, 휴식 값을 가져옵니다.
@@ -128,7 +130,7 @@ def set_reps():
             }), 400
 
         # 세트, 횟수, 휴식 값을 설정하는 로직 (예시로 TrainingManager 객체 사용)
-        TrainMange.setReps(sets, reps, rest)
+        # TrainMange.setReps(sets, reps, rest)
 
         # 성공적으로 설정되었을 경우 200 상태 코드와 메시지 반환
         return jsonify({
@@ -143,11 +145,11 @@ def set_reps():
             "message": "An error occurred while setting reps. Please try again later."
         }), 500
 
-@app.route('/training/process/start', methods=['POST'])  # 훈련 시작하기
+@app.route('/start-process', methods=['POST'])  # 훈련 시작하기
 def process_start():
     return handle_process("start")
 
-@app.route('/training/process/stop', methods=['POST'])  # 훈련 중단하기
+@app.route('/stop-process', methods=['POST'])  # 훈련 중단하기
 def process_stop():
     return handle_process("stop")
 
@@ -192,15 +194,13 @@ def emit_sensor_data():
         time.sleep(1)
 
 if __name__ == '__main__':
-    # 센서 데이터 스레드 실행
-    sensor_thread = threading.Thread(target=emit_sensor_data)
-    sensor_thread.start()
-
-    try:
-        socketio.run(app, host="0.0.0.0", port=5000)
-    except KeyboardInterrupt:
-        flag = False
-        sensor_thread.join()
-        print("Shutting down server.")
+    # # 센서 데이터 스레드 실행
+    # sensor_thread = threading.Thread(target=emit_sensor_data)
+    # sensor_thread.start()
+    socketio.run(app, host="0.0.0.0", port=5000)
+    # except KeyboardInterrupt:
+    #     flag = False
+    #     sensor_thread.join()
+    #     print("Shutting down server.")
 
 

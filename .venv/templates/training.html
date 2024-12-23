@@ -3,185 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.socket.io/4.8.0/socket.io.min.js"></script>
-    <title>avr_power</title>
+    <title>재활치료 서비스</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
         }
-        html, body {
-            height: 100%;
+
+        body {
+            font-family: "Gothic A1", Inter, system-ui, sans-serif;
             overflow: hidden;
+        }
+
+        .hero {
+            position: relative;
+            background-image: url('../static/g.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 100vw;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            font-family: "Gothic A1", Inter, system-ui, sans-serif;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 0;
+        }
+
+        button {
+            width: 250px;
+            height: 60px;
+            border-radius: 20px;
+            color: white;
+            background-color: #00A24F;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 25px;
+            font-size: 23px;
+            border: 1px solid #00A24F;
+        }
+
+        button:hover {
+            background-color: #198c4d;
+        }
+
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #ffffff;
-            border: 1px solid black;
-            padding: 20px 40px;
-        }
-
-        .logo {
-            color: #000;
-            font-size: 40px;
-            font-family: "Yeongdo OTF", Inter, system-ui, sans-serif;
-        }
-
-        .nav-links {
-            list-style: none;
-            display: flex;
-        }
-
-        .nav-links li {
-            margin-left: 20px;
-        }
-        li{
-            font-weight: bold;
-        }
-
-        .nav-links a {
-            color: black;
-            text-decoration: none;
-            font-size: 20px;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #ddd;
-        }
-
-        .pulser-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1;
-        }
-
-        .pulser {
-            width: 280px;
-            height: 280px;
-            background: #00A24F;
-            border: 20px solid #127112;
-            border-radius: 50%;
-            position: relative;
-            margin-bottom: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #D2F3CC;
-            font-size: 40px;
-            font-weight: bold;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .pulser::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            padding: 15px 30px;
+            position: fixed;
             top: 0;
-            left: 0;
-            background: #1EC301;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            color: white;
+            font-size: 40px;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-family: "Yeongdo OTF", Inter, system-ui, sans-serif;
+            margin-left: 100px;
+        }
+
+        .navbar ul {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar ul li {
+            margin-left: 60px;
+        }
+
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: #7d7a7a;
+        }
+
+        .container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .circle-graph-wrapper {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .circle-graph {
+            position: relative;
+            margin: 0 auto;
+            z-index: 1;
+            background: rgba(255, 255, 255, 1);
             border-radius: 50%;
-            z-index: -1;
-            opacity: 0;
-            transform: scale(1);
         }
 
-        .pulser.active::after {
-            animation: pulse 2000ms cubic-bezier(0.9, 0.7, 0.5, 0.9) infinite;
+        .circle-percent {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            font-weight: bold;
+            color: #555;
+            z-index: 2;
         }
 
-        @keyframes pulse {
-            0% {
-                opacity: 0;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.4;
-                transform: scale(1.4);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(1);
-            }
+        .count-wrapper {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
-        .explain {
-            text-align: center;
-            font-size: 35px;
-            padding-bottom: 60px;
+        .now_blank {
+            margin-bottom: 5px;
+            height: 70px;
+            width: 250px;
+            border: 1px solid #8C8B8B;
+            border-radius: 20px;
+            background-color: #AAA5A3;
+            color: white;
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        h3 {
-            text-shadow: 80px 80px 80px #FCFFDD;
+        .start_button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        a{
-             text-decoration: none;
-         }
+        .inbox {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 700px;
+            height: 600px;
+            background-color: rgba(195, 187, 183, 0.8);
+            border-radius: 100px;
+            padding: 20px;
+            z-index: 0;
+        }
+        .active {
+
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <a href="{{ url_for('main') }}"><div class="logo">리햅핑</div></a>
-        <ul class="nav-links">
-            <li><a href="{{ url_for('training') }}">훈련 시작</a></li>
-            <li><a href="{{ url_for('pretrain') }}">훈련 현황</a></li>
-            <li><a href="{{ url_for('userguide') }}">사용 가이드</a></li>
-        </ul>
-    </nav>
-    <div class="pulser-container">
-        <div class="pulser">측정하기</div>
-    </div>
-    <h1>Sensor Value: <span id="sensor-value">0</span></h1>
-    <div class="explain">
-        <h3>이 힘을 기준으로 훈련 강도가 정해질 예정입니다.<br>손가락을 천천히 수축 이완하며, 편안 힘으로 꾸준히 10번 반복해주세요</h3>
-    </div>
+<div class="navbar">
+    <a href="#" class="logo">리햅핑</a>
+    <ul>
+        <li><a href="{{ url_for('training') }}">훈련 시작</a></li>
+        <li><a href="{{ url_for('history') }}">훈련 현황</a></li>
+        <li><a href="{{ url_for('userguide') }}">사용 가이드</a></li>
+    </ul>
+</div>
 
-    <script src="https://cdn.socket.io/4.8.0/socket.io.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.pulser').on('click', function() {
-                if ($(this).hasClass('active')) {
-                     $.ajax({
-                         type: "POST",
-                         url: 'training/process/stop',
-                         dataType: 'json',
-                    }).done(function (data) {
-                        console.log(data);
-                         pulser.innerHTML = "측정하기";
-                    }).fail(function (data) {
-                        console.log(data);
-                    })
+<div class="hero">
+    <div class="container">
+        <div class="inbox">
+        <div class="graph-wrap active-on-visible" data-active-on-visible-callback-func-name="CircleRun">
+            <div class="circle-graph-wrapper">
+                <div class="circle-graph" circleProgress="0">
+                    <strong class="circle-percent">0%</strong>
+                </div>
+            </div>
+            <div class="count-wrapper">
+                <div class="now_blank">세트 0 / 5</div>
+                <div class="now_blank">횟수 0 / 7</div>
+            </div>
+            <div class="count-wrapper">
+                <button id="sbutton" type="button">시작하기</button>
+                <button id="ebutton" type="button">끝내기</button>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer id="senser-value">100</footer>
+<script src="https://cdn.socket.io/4.8.0/socket.io.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-circle-progress/1.2.2/circle-progress.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // 초기 그래프 설정
+        $(".circle-graph").each(function (index, node) {
+            let perNum = $(this).attr("circleProgress"); // 초기 값 가져오기
+            let fillColors = ["#00A24F"]; // 그래프 색상 배열
+            let fillColor = fillColors[index];
 
-                }
-                else {
-                    $.ajax({
-                        type: "POST",
-                        url: 'training/process/start'
-                    }).done(function (data) {
-                        console.log(data);
-                        pulser.innerHTML = "측정중";
-                    }).fail(function () {
-                        console.log(data)
-                    })
-                }
-                pulser.classList.toggle('active');
-            })
+            $(this).circleProgress({
+                size: 336, // 그래프 크기
+                value: perNum / 100, // 그래프 초기값 (0~1)
+                startAngle: -Math.PI / 2,
+                thickness: 30, // 그래프 두께
+                fill: {
+                    color: fillColor,
+                },
+                reverse: true,
+                animation: {
+                    duration: 1200,
+                },
+                lineCap: "round", // 그래프 선 모양
+            });
         });
-        const pulser = document.querySelector('.pulser');
+
+        $('#ebutton').on('click', function () {
+            $.ajax({
+                type: "POST",
+                url: "/stop-process",
+                dataType: "json",
+            })
+                .done(function (data) {
+                    console.log("Process stopped:", data);
+                    const button = $(this); // 현재 버튼 참조
+                    button.text("시작하기");
+                    button.removeClass("active");
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/save-average-force',
+                    })
+                    .done(function (response) {
+                        console.log('Success:', response);
+                        window.location.href = '/history';
+                    })
+                    .fail(function (error) {
+                        console.error('Error:', error);
+                    });
+                })
+
+                .fail(function (error) {
+                    console.error("Failed to stop process:", error);
+                });
+            });
+        });
+        $("#sbutton").on("click", function () {
+        const button = $(this); // 버튼 객체
+        if (button.hasClass("active")) {
+            // '그만하기' 상태에서 멈춤 요청
+            $.ajax({
+                type: "POST",
+                url: "/stop-process",
+                dataType: "json",
+            })
+                .done(function (data) {
+                    console.log("Process stopped:", data);
+                    button.text("시작하기");
+                    button.removeClass("active");
+                })
+                .fail(function (error) {
+                    console.error("Failed to stop process:", error);
+                });
+        } else {
+            // '시작하기' 상태에서 시작 요청
+            $.ajax({
+                type: "POST",
+                url: "/start-process",
+            })
+                .done(function (data) {
+                    console.log("Process started:", data);
+                    button.text("중단하기");
+                    button.addClass("active");
+                })
+                .fail(function (error) {
+                    console.error("Failed to start process:", error);
+                });
+        }
+    });
+        // Socket.IO 연결
+        let datas = []
         const socket = io.connect("http://127.0.0.1:5000/");
-        socket.on('sensor_data', function(data) {
-                document.getElementById('sensor-value').innerText = data.value;
+        socket.on("sensor_data", function (data) {
+            const value = data.value / 100; // 값 (0~1 범위)
+            datas.push(value);
+            $(".circle-graph").circleProgress("value", value); // 그래프 업데이트
+            $(".circle-percent").text(`${Math.round(data.value)}%`); // 퍼센트 표시 업데이트
         });
 </script>
 </body>

@@ -1,16 +1,18 @@
+from random import random
+
 from flask import Flask, request, render_template, jsonify, redirect
 from flask_socketio import SocketIO
 from flask_cors import CORS
-import MySQL
+# import MySQL
 # import time
 # import board
 # import busio
 # from digitalio import DigitalInOut
 # from adafruit_mcp3xxx.mcp3008 import MCP3008
 # from adafruit_mcp3xxx.analog_in import AnalogIn
-# import time
+import time
 import threading
-
+import random
 
 app = Flask(__name__)
 # averageForce = MySQL.AverageForce()
@@ -59,9 +61,9 @@ def setreps():
 def history():
     try:
         # history_data = averageForce.getHistory()
-        #
-        # if not history_data:
-        #     return jsonify({"status": "error", "message": "No training history found."}), 404
+
+        if not history_data:
+            return jsonify({"status": "error", "message": "No training history found."}), 404
 
         return jsonify({
             "status": "success",
@@ -108,7 +110,6 @@ def set_reps():
         sets = request.json.get('sets')
         reps = request.json.get('reps')
         rest = request.json.get('rest')
-
         # 세트, 횟수, 휴식 값이 모두 제공되었는지 확인
         if sets is None or reps is None or rest is None:
             return jsonify({
@@ -185,8 +186,8 @@ def emit_sensor_data():
     global flag
     while flag:
         # 센서 값 읽기
-        sensor_value = chan.value  # 16비트 정수 값 (0~65535)
-        voltage = chan.voltage  # 전압 값 (0~3.3V)
+        sensor_value = random.random()*100 #chan.value  # 16비트 정수 값 (0~65535)
+        voltage = 3#chan.voltage  # 전압 값 (0~3.3V)
 
         # 소켓 이벤트 송신
         socketio.emit('sensor_data', {'value': sensor_value, 'voltage': voltage})
@@ -194,10 +195,11 @@ def emit_sensor_data():
         time.sleep(1)
 
 if __name__ == '__main__':
-    # # 센서 데이터 스레드 실행
-    # sensor_thread = threading.Thread(target=emit_sensor_data)
-    # sensor_thread.start()
-    socketio.run(app, host="0.0.0.0", port=5000)
+    # 센서 데이터 스레드 실행
+    sensor_thread = threading.Thread(target=emit_sensor_data)
+    sensor_thread.start()
+    # try:
+    socketio.run(app, host="0.0.0.0", port=5000, debug=True)
     # except KeyboardInterrupt:
     #     flag = False
     #     sensor_thread.join()
